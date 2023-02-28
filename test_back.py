@@ -2,9 +2,9 @@ import requests
 
 # Liste des URLs à tester
 urls = ['http://127.0.0.1:5000/get_ids',
-       'http://127.0.0.1:5000/data/220314',
-        'http://127.0.0.1:5000/predict/220314',
-        'http://127.0.0.1:5000/shap/220314'
+       'http://127.0.0.1:5000/data/380921',
+        'http://127.0.0.1:5000/predict/380921',
+        'http://127.0.0.1:5000/shap/380921'
         
         ]
 
