@@ -6,6 +6,7 @@ import shap
 import pandas as pd
 import numba
 import numpy as np
+import json
 
 
 df = pd.read_csv('./data_OHE.csv')
@@ -32,7 +33,7 @@ def home():
 # A get list of ids.
 @app.route('/get_ids', methods=['GET'])
 def get_ids():
-    return jsonify(list(data['SK_ID_CURR']))
+    return jsonify(list(data['SK_ID_CURR'])[:10]) 
 
 # Get infos according to ids
 @app.route('/data/<int:id>', methods=['GET'])
@@ -78,5 +79,12 @@ def shap(id):
     return shap_dict
 
 
+# Get shap according to ids
+
+@app.route('/graph/<int:id>', methods=['GET'])
+def graph(id):
+    graph = data.describe()
+    return data.to_json()
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
