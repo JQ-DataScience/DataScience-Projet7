@@ -84,7 +84,7 @@ def shap(id):
 @app.route('/graph/<int:id>', methods=['GET'])
 def graph(id):
     graph = data.describe()
-    return data.to_json()
+    return graph.to_json()
 
 if __name__ == "__main__":
     app.run(debug=True)

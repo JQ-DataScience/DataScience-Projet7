@@ -82,6 +82,7 @@ st.title("Scoring")
 st.write("Prédiction:")
 st.json(predict)
 
+
 # Données SHAP
 st.title("Composantes déterminante dans la décision")
 st.write("SHAP:")
@@ -102,12 +103,14 @@ import plotly.express as px
 
 ################## GRAPH 1  ####################
 
-
 # Convertir le JSON en un dataframe pandas
 shap_df = pd.DataFrame.from_dict(sorted_shap, orient='index', columns=['SHAP Value'])
 
-# Afficher le graphique beeswarm
-fig2 = px.scatter(shap_df, x='SHAP Value', orientation='h')
+# Ajouter une colonne pour la couleur en fonction de la valeur SHAP
+shap_df['Color'] = shap_df['SHAP Value'].apply(lambda x: 'blue' if abs(x) < 0.1 else 'green' if x >= 0 else 'orange')
+
+# Afficher le graphique beeswarm avec des couleurs de point personnalisées
+fig2 = px.scatter(shap_df, x='SHAP Value', orientation='h', color='Color', color_discrete_map={'blue':'blue', 'green':'green', 'orange':'orange'})
 st.plotly_chart(fig2)
 
 ################## GRAPH 2  ####################
@@ -191,4 +194,29 @@ fig.update_layout(
 # Affichage du graphique
 st.plotly_chart(fig)
 
+################## GRAPH 3  ####################
 
+
+# Sélectionner l'individu pour lequel on veut afficher les données
+individu = data.index[0]
+
+# Sélectionner les caractéristiques à afficher
+features = st.multiselect("Sélectionnez les caractéristiques à afficher", data.columns)
+
+# Sous-ensemble de données pour l'individu sélectionné et les caractéristiques sélectionnées
+subset = data.loc[individu, features]
+
+# Sous-ensemble des données de describe() pour les caractéristiques sélectionnées
+describe_subset = graph 
+
+# Créer un graphique pour chaque caractéristique sélectionnée
+for feature in features:
+    fig = px.scatter(x=[subset[feature]], y=[feature], color_discrete_sequence=['blue'])
+    fig.add_vline(x=describe_subset.loc['min', feature], line_dash='dash', line_color='red', name='min')
+    fig.add_vline(x=describe_subset.loc['25%', feature], line_dash='dash', line_color='orange', name='1er quartile')
+    fig.add_vline(x=describe_subset.loc['50%', feature], line_dash='dash', line_color='green', name='médiane')
+    fig.add_vline(x=describe_subset.loc['75%', feature], line_dash='dash', line_color='orange', name='3ème quartile')
+    fig.add_vline(x=describe_subset.loc['max', feature], line_dash='dash', line_color='red', name='max')
+    fig.add_vline(x=describe_subset.loc['mean', feature], line_dash='dash', line_color='purple', name='moyenne')
+    fig.update_layout(showlegend=True)
+    st.plotly_chart(fig)
