@@ -6,7 +6,7 @@ import logging
 
 
 ################## requests from back end ####################
-serveur = 'http://127.0.0.1:5000/'
+serveur = 'http://13.39.13.215:5000/'
 
 ## request get_ids
 response = requests.get(serveur+'get_ids')
@@ -82,6 +82,41 @@ st.title("Scoring")
 st.write("Prédiction:")
 st.json(predict)
 
+
+##########################data###############################
+# TEST COLORISATION PREDICTION
+
+#import plotly.graph_objs as go
+#import numpy as np
+
+
+
+# Les données fournies
+#json_data = predict
+#json_data = json.loads(json_data.js#on())
+
+
+#pourcentage = np.array(json_data['pourcentage'])
+#prediction = np.array(json_data['prediction'])
+
+# La définition des couleurs
+#colors = ['green' if p == 0 else 'red' for p in prediction]
+
+# La création de la table
+#table_data = go.Table(
+#    header=dict(values=['Pourcentage', 'Prediction'],
+#                fill_color='lightgrey',
+#                align='left'),
+#    cells=dict(values=[pourcentage[0], prediction],
+#               fill_color=[colors],
+#               align='left'))
+#
+# L'affichage de la table
+#st.plotly_chart(table_data)
+
+
+
+#########################################################
 
 # Données SHAP
 st.title("Composantes déterminante dans la décision")
