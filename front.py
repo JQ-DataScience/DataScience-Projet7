@@ -6,7 +6,7 @@ import logging
 
 
 ################## requests from back end ####################
-serveur = 'http://13.39.13.215:5000/'
+serveur = 'http://15.188.55.181:5000/'
 
 ## request get_ids
 response = requests.get(serveur+'get_ids')
