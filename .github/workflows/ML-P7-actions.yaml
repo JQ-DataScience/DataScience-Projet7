@@ -19,6 +19,9 @@ jobs:
     - name: Install Dependencies
       run: pip install -r requirements.txt
       
+    - name: Download data
+      run: python data_dl.py
+      
     - name: Run Tests
       run: |
-        pytest test_back_pytest.py
+        pytest test_back_pytest.py --v
