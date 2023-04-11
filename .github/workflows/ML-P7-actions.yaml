@@ -1,0 +1,24 @@
+name: Tests unitaires pour le back-end
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+      
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      
+    - name: Run Tests
+      run: |
+        pytest test_back_pytest.py
