@@ -6,3 +6,4 @@ numpy
 pandas
 shap
 requests
+boto3
