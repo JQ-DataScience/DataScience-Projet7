@@ -7,6 +7,7 @@ import pandas as pd
 import numba
 import numpy as np
 import json
+import os
 
 
 df = pd.read_csv('./data_OHE.csv')
@@ -17,13 +18,11 @@ data = df.copy()
 # import the model // with  as F a implémenter
 model = pickle.load(open('best_model.pkl', 'rb'))
 
-
-
 # import SHAP explainer :
-
 explainer = pickle.load(open('explainer.pkl', 'rb'))
 
 app = Flask(__name__)
+app2 = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -53,7 +52,6 @@ def predict(id):
         "pourcentage":str(pourcentage)
     }
     
-
     return jsonify(pred)
 
 # Get shap according to ids
@@ -86,5 +84,13 @@ def graph(id):
     graph = data.describe()
     return graph.to_json()
 
+
+# Hook for git pull
+@app.route('/', methods=['GET'])
+def trigger_deployment():
+    os.system('git pull')
+    return 'Git pull effectué avec succès'
+
 if __name__ == "__main__":
     app.run(debug=True)
+    app2.run(port=5999)
