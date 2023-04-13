@@ -26,5 +26,5 @@ if not os.path.isfile('best_model.pkl'):
 # Téléchargement du fichier explainer.pkl depuis S3
 if not os.path.isfile('explainer.pkl'):
     bucket = s3.Bucket(bucket_name)
-    obj = bucket.Object('best_model.pkl')
-    obj.download_file('best_model.pkl')
+    obj = bucket.Object('explainer.pkl')
+    obj.download_file('explainer.pkl')
