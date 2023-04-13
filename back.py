@@ -60,7 +60,7 @@ def predict(id):
 @app.route('/shap/<int:id>', methods=['GET'])
 def shap(id):
     row = data.loc[data['SK_ID_CURR'] == id]
-    idx = int(data.loc[data['SK_ID_CURR'] == 380921].index.tolist()[0])
+    idx = int(data.loc[data['SK_ID_CURR'] == id].index.tolist()[0])
     row= row.drop(columns=['TARGET','SK_ID_CURR'])
     prediction= model
     # Fits the explainer
