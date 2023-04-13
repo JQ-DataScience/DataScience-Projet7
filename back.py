@@ -92,5 +92,5 @@ def trigger_deployment():
     return 'Git pull effectué avec succès'
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    app2.run(port=5999)
+    app.run()
+    app2.run(port=5001)
