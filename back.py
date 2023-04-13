@@ -86,7 +86,7 @@ def graph(id):
 
 
 # Hook for git pull
-@app.route('/', methods=['GET'])
+@app2.route('/', methods=['GET'])
 def trigger_deployment():
     os.system('git pull')
     return 'Git pull effectué avec succès'
