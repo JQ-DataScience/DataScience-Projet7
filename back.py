@@ -22,7 +22,6 @@ model = pickle.load(open('best_model.pkl', 'rb'))
 explainer = pickle.load(open('explainer.pkl', 'rb'))
 
 app = Flask(__name__)
-app2 = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -85,12 +84,19 @@ def graph(id):
     return graph.to_json()
 
 
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+
 # Hook for git pull
-@app2.route('/', methods=['GET'])
+
+app2 = Flask(__name__)
+@app2.route('/')
 def trigger_deployment():
     os.system('git pull')
     return 'Git pull effectué avec succès'
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
     app2.run(host='0.0.0.0', port=5001)
