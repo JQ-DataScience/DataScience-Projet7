@@ -30,4 +30,4 @@ jobs:
     - name: Envoyer une requête à EC2
       run: |
         echo "Triggering deployment on EC2"
-        curl ${{ secrets.EC2_IP }}:5999
+        curl ${{ secrets.EC2_IP }}:5001
