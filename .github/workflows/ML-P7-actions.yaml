@@ -1,5 +1,6 @@
 name: Tests unitaires pour le back-end
 
+EC2_IP = http://13.37.217.109
 on:
   push:
     branches: [ main ]
@@ -25,3 +26,9 @@ jobs:
     - name: Run Tests
       run: |
         pytest test_back_pytest.py
+
+    - name: Envoyer une requête à EC2
+      run: |
+        echo "Triggering deployment on EC2"
+        response=$(curl -sSL http://13.37.217.109:5001)
+        echo "Réponse de la requête : $response"
