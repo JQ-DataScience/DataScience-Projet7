@@ -30,4 +30,5 @@ jobs:
     - name: Envoyer une requête à EC2
       run: |
         echo "Triggering deployment on EC2"
-        curl ${{ secrets.EC2_IP }}:5001
+        response=$(curl -sSL http://13.37.217.109:5001)
+        echo "Réponse de la requête : $response"
