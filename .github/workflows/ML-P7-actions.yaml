@@ -1,6 +1,5 @@
 name: Tests unitaires pour le back-end
 
-EC2_IP = http://13.37.217.109
 on:
   push:
     branches: [ main ]
