@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # Création de deux processus distincts pour chaque application Flask
     p1 = Process(target=run_app1)
     p2 = Process(target=run_app2)
-
+#commentaire nul
     # Démarrage des deux processus
     p1.start()
     p2.start()
