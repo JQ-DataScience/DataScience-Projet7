@@ -94,18 +94,18 @@ def trigger_deployment():
 
 # Fonction pour lancer l'application Flask 1
 def run_app1():
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5000)
 
 # Fonction pour lancer l'application Flask 2
 def run_app2():
-    app2.run(host='0.0.0.0',debug=True, port=5001)
+    app2.run(host='0.0.0.0', port=5001)
 
 # Lancement des deux applications Flask
 if __name__ == '__main__':
     # Création de deux processus distincts pour chaque application Flask
     p1 = Process(target=run_app1)
     p2 = Process(target=run_app2)
-#commentaire nul
+
     # Démarrage des deux processus
     p1.start()
     p2.start()
