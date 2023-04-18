@@ -1,4 +1,4 @@
-name: Tests unitaires pour le back-end
+name: Tests unitaires pour le back-end V2
 
 on:
   push:
