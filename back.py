@@ -94,7 +94,7 @@ def trigger_deployment():
 
 # Fonction pour lancer l'application Flask 1
 def run_app1():
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0',debug=True, port=5000)
 
 # Fonction pour lancer l'application Flask 2
 def run_app2():
