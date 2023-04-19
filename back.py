@@ -8,7 +8,7 @@ import numba
 import numpy as np
 import json
 import os
-"""from multiprocessing import Process"""
+from multiprocessing import Process
 
 df = pd.read_csv('./data_OHE.csv')
 
@@ -85,18 +85,17 @@ def graph(id):
 
 # Hook for git pull
 
-"""app2 = Flask(__name__)"""
+app2 = Flask(__name__)
 
-@app.route('/pull')
+@app2.route('/')
 def trigger_deployment():
     os.system('git pull')
     return 'Git pull effectué avec succès'
 
-   
+# Fonction pour lancer l'application Flask 1
+def run_app1():
+    app.run(host='0.0.0.0',debug=True, port=5000)
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
-"""
 # Fonction pour lancer l'application Flask 2
 def run_app2():
     app2.run(host='0.0.0.0', port=5001)
@@ -115,4 +114,3 @@ if __name__ == '__main__':
     p1.join()
     p2.join()
 
-"""
