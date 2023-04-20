@@ -6,7 +6,7 @@ import logging
 
 
 ################## requests from back end ####################
-serveur = 'http://13.39.80.224:5000/'
+serveur = 'http://13.37.142.213:5000/'
 
 ## request get_ids
 response = requests.get(serveur+'get_ids')
@@ -45,7 +45,7 @@ data = pd.DataFrame(response.json())
 
 ## request predictions
 response = requests.get(serveur+'predict/'+str(selected_id))
-predict  = response.json()
+predict  = json.dumps(response.json())
 
 
 ## request shap according to ids
@@ -78,10 +78,31 @@ if selected_id:
  
 
 # Données de prédiction
-st.title("Scoring")
-st.write("Prédiction:")
-st.json(predict)
+prediction_data = json.loads(predict)
+st.write(prediction_data['prediction'][0])
+# Afficher l'entête "SCORING" en majuscules
+st.title("SCORING")
 
+# Récupérer la valeur de prédiction
+prediction = prediction_data["prediction"][1]
+
+# Récupérer le pourcentage de la prédiction
+pourcentage = prediction_data["pourcentage"]
+
+# Vérifier si la valeur de prédiction est égale à 0
+if int(prediction) == 0:
+    # Afficher "Vers" en vert
+    st.write("Prédiction: ", "<span style='color:green;font-weight:bold'> Avis favorable </span>", unsafe_allow_html=True)
+    st.markdown("""<div style='border: 2px solid green; padding: 10px; color: green; text-transform: uppercase; font-weight: bold;'>Risque de défaut de crédit acceptable</div>""", unsafe_allow_html=True)
+
+else:
+    # Afficher la valeur de prédiction en rouge
+    st.write("Prédiction: ", "<span style='color:red;font-weight:bold'> Avis défavorable" + str(prediction) +"</span>", unsafe_allow_html=True)
+    # Afficher le texte "Risque de défaut de crédit important" en rouge et majuscule dans un cadre avec une bordure rouge
+    st.markdown("""<div style='border: 2px solid red; padding: 10px; color: red; text-transform: uppercase; font-weight: bold;'>Risque de défaut de crédit important</div>""", unsafe_allow_html=True)
+
+# Afficher le pourcentage de la prédiction
+st.write("Pourcentage: ", pourcentage)
 
 ##########################data###############################
 # TEST COLORISATION PREDICTION

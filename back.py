@@ -98,7 +98,7 @@ def run_app1():
 
 # Fonction pour lancer l'application Flask 2
 def run_app2():
-    app2.run(host='0.0.0.0', port=5001)
+    app2.run(host='0.0.0.0',debug=True, port=5001)
 
 # Lancement des deux applications Flask
 if __name__ == '__main__':
