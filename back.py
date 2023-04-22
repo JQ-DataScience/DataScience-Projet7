@@ -85,32 +85,33 @@ def graph(id):
 
 # Hook for git pull
 
-app2 = Flask(__name__)
+#app2 = Flask(__name__)
 
-@app2.route('/')
+@app.route('/git/')
 def trigger_deployment():
-    os.system('git pull')
+    #os.system('git pull')
     return 'Git pull effectué avec succès'
 
 # Fonction pour lancer l'application Flask 1
-def run_app1():
+'''def run_app1():
     app.run(host='0.0.0.0',debug=True, port=5000)
 
 # Fonction pour lancer l'application Flask 2
 def run_app2():
-    app2.run(host='0.0.0.0', port=5001)
+    app2.run(host='0.0.0.0',debug=True, port=5001)'''
 
 # Lancement des deux applications Flask
 if __name__ == '__main__':
+    app.run(host='0.0.0.0',debug=True, port=5000)
     # Création de deux processus distincts pour chaque application Flask
-    p1 = Process(target=run_app1)
-    p2 = Process(target=run_app2)
+    #p1 = Process(target=run_app1)
+    #p2 = Process(target=run_app2)
 
     # Démarrage des deux processus
-    p1.start()
-    p2.start()
+    #p1.start()
+    #p2.start()
 
     # Attente de la fin des deux processus
-    p1.join()
-    p2.join()
+    #p1.join()
+    #p2.join()
 
