@@ -8,7 +8,7 @@ import numba
 import numpy as np
 import json
 import os
-from multiprocessing import Process
+
 
 df = pd.read_csv('./data_OHE.csv')
 
@@ -58,21 +58,18 @@ def predict(id):
 def shap(id):
     row = data.loc[data['SK_ID_CURR'] == id]
     idx = int(data.loc[data['SK_ID_CURR'] == id].index.tolist()[0])
+    print(idx)
     row= row.drop(columns=['TARGET','SK_ID_CURR'])
-    prediction= model
+    prediction = model
     # Fits the explainer
-    #explainer = shap.Explainer(prediction.predict, row)
-    
+     
     # Calculates the SHAP values - It takes some time
     shap_values = explainer(row)
-
+    
     #{k : round(v, 4) for v,k in zip(shap_values[3].values, shap_values[3].feature_names)}
-    shap_dict = {k : round(v, 4) for v,k in zip(shap_values[idx].values, shap_values[idx].feature_names)}
-    """shap.plots.bar(shap_values)
-    # or
-    shap.summary_plot(shap_values)
-    # or 
-    shap.plots.beeswarm(shap_values)"""
+    
+    shap_dict = {k : round(v, 4) for v,k in zip(shap_values[0].values, shap_values[0].feature_names)}
+ 
     return shap_dict
 
 
@@ -92,26 +89,8 @@ def trigger_deployment():
     #os.system('git pull')
     return 'Git pull effectué avec succès'
 
-# Fonction pour lancer l'application Flask 1
-'''def run_app1():
-    app.run(host='0.0.0.0',debug=True, port=5000)
 
-# Fonction pour lancer l'application Flask 2
-def run_app2():
-    app2.run(host='0.0.0.0',debug=True, port=5001)'''
-
-# Lancement des deux applications Flask
+# Lancement des applications Flask
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5000)
-    # Création de deux processus distincts pour chaque application Flask
-    #p1 = Process(target=run_app1)
-    #p2 = Process(target=run_app2)
-
-    # Démarrage des deux processus
-    #p1.start()
-    #p2.start()
-
-    # Attente de la fin des deux processus
-    #p1.join()
-    #p2.join()
 
