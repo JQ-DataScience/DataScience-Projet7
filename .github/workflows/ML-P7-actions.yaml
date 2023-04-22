@@ -29,5 +29,5 @@ jobs:
     - name: Envoyer une requête à EC2
       run: |
         echo "Triggering deployment on EC2"
-        response=$(curl -sSL http://13.37.142.213:5001)
+        response=$(curl -sSL http://13.37.142.213:5000/git/)
         echo "Réponse de la requête : $response"
