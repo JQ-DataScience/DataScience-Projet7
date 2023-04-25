@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import requests
 import json
 import logging
@@ -15,14 +16,13 @@ get_ids  = response.json()
 ################## HTML ####################
 
 # Entête centrée
-st.title("Simulateur de crédits 3000")
+st.markdown(
+    f'<div style="background-color:#4aa8b0;padding:10px;border-radius:10px;"><h1 style="color:#ffffff;text-align:center;">Simulateur de crédits 3000</h1></div>',
+    unsafe_allow_html=True,
+)
 
 # Menu déroulant
 selected_id = st.selectbox("Sélectionnez un ID", get_ids)
-
-
-
-
 
 
 #logging.warning(str(get_ids))
@@ -56,7 +56,7 @@ shap  = response.json()
 response = requests.get(serveur+'graph/'+str(selected_id))
 graph  = pd.DataFrame(response.json())
 
-st.write(graph)
+#st.write(graph)
 
 # Trier les valeurs du JSON par ordre croissant tout en conservant les clés
 sorted_shap = {}
@@ -97,43 +97,18 @@ if int(prediction) == 0:
 
 else:
     # Afficher la valeur de prédiction en rouge
-    st.write("Prédiction: ", "<span style='color:red;font-weight:bold'> Avis défavorable" + str(prediction) +"</span>", unsafe_allow_html=True)
+    st.write("Prédiction: ", "<span style='color:red;font-weight:bold'> Avis défavorable</span>", unsafe_allow_html=True)
     # Afficher le texte "Risque de défaut de crédit important" en rouge et majuscule dans un cadre avec une bordure rouge
     st.markdown("""<div style='border: 2px solid red; padding: 10px; color: red; text-transform: uppercase; font-weight: bold;'>Risque de défaut de crédit important</div>""", unsafe_allow_html=True)
 
 # Afficher le pourcentage de la prédiction
-st.write("Pourcentage: ", pourcentage)
 
+
+
+st.write(" Certitude de recouvrement / Certitude de défaut ")
+st.write(pourcentage)
 ##########################data###############################
-# TEST COLORISATION PREDICTION
 
-#import plotly.graph_objs as go
-#import numpy as np
-
-
-
-# Les données fournies
-#json_data = predict
-#json_data = json.loads(json_data.js#on())
-
-
-#pourcentage = np.array(json_data['pourcentage'])
-#prediction = np.array(json_data['prediction'])
-
-# La définition des couleurs
-#colors = ['green' if p == 0 else 'red' for p in prediction]
-
-# La création de la table
-#table_data = go.Table(
-#    header=dict(values=['Pourcentage', 'Prediction'],
-#                fill_color='lightgrey',
-#                align='left'),
-#    cells=dict(values=[pourcentage[0], prediction],
-#               fill_color=[colors],
-#               align='left'))
-#
-# L'affichage de la table
-#st.plotly_chart(table_data)
 
 
 
@@ -142,12 +117,19 @@ st.write("Pourcentage: ", pourcentage)
 # Données SHAP
 st.title("Composantes déterminante dans la décision")
 st.write("SHAP:")
-st.json(sorted_shap)   
+#st.json(sorted_shap)   
+
+# Conversion en dataframe trié
+df = pd.DataFrame.from_dict(sorted_shap, orient='index', columns=['Value'])
+df = df.sort_values(by='Value')
+
+# Affichage dans Streamlit
+st.write(df)
 
 
 # Données SHAP
 st.title("Graphique")
-st.write("GRAPH")
+
 #st.json(graph)   
 
 
@@ -158,6 +140,7 @@ import plotly.express as px
 
 
 ################## GRAPH 1  ####################
+st.write("GRAPH 1 - SHAP VALUES")
 
 # Convertir le JSON en un dataframe pandas
 shap_df = pd.DataFrame.from_dict(sorted_shap, orient='index', columns=['SHAP Value'])
@@ -170,6 +153,7 @@ fig2 = px.scatter(shap_df, x='SHAP Value', orientation='h', color='Color', color
 st.plotly_chart(fig2)
 
 ################## GRAPH 2  ####################
+st.write("GRAPH 2 - Analyse d'une variable")
 
 # Options de sélection pour les variables et l'individu
 options_vars = data.columns.tolist()
@@ -252,6 +236,15 @@ st.plotly_chart(fig)
 
 ################## GRAPH 3  ####################
 
+st.write("GRAPH 3 - Analyse de multiples caractéristiques")
+
+st.write("LEGENDE")
+
+st.markdown("<span style='color: blue'>BLEU = Minima et Maxima</span>", unsafe_allow_html=True)
+st.markdown("<span style='color: #FFA500'>ORANGE = 1er 3eme QUARTILES</span>", unsafe_allow_html=True)
+st.markdown("<span style='color: green'>VERT = MEDIANE</span>", unsafe_allow_html=True)
+st.markdown("<span style='color: purple'>VIOLET = MOYENNE</span>", unsafe_allow_html=True)
+
 
 # Sélectionner l'individu pour lequel on veut afficher les données
 individu = data.index[0]
@@ -265,14 +258,25 @@ subset = data.loc[individu, features]
 # Sous-ensemble des données de describe() pour les caractéristiques sélectionnées
 describe_subset = graph 
 
+# dataframe de legend
+df_legend = pd.DataFrame(columns=['Element', 'Couleur'])
 # Créer un graphique pour chaque caractéristique sélectionnée
 for feature in features:
-    fig = px.scatter(x=[subset[feature]], y=[feature], color_discrete_sequence=['blue'])
-    fig.add_vline(x=describe_subset.loc['min', feature], line_dash='dash', line_color='red', name='min')
+    fig = px.scatter(x=[subset[feature]], y=[feature], color_discrete_sequence=['red'])
+    fig.add_vline(x=describe_subset.loc['min', feature], line_dash='dash', line_color='blue', name='min')
     fig.add_vline(x=describe_subset.loc['25%', feature], line_dash='dash', line_color='orange', name='1er quartile')
     fig.add_vline(x=describe_subset.loc['50%', feature], line_dash='dash', line_color='green', name='médiane')
     fig.add_vline(x=describe_subset.loc['75%', feature], line_dash='dash', line_color='orange', name='3ème quartile')
-    fig.add_vline(x=describe_subset.loc['max', feature], line_dash='dash', line_color='red', name='max')
+    fig.add_vline(x=describe_subset.loc['max', feature], line_dash='dash', line_color='blue', name='max')
     fig.add_vline(x=describe_subset.loc['mean', feature], line_dash='dash', line_color='purple', name='moyenne')
     fig.update_layout(showlegend=True)
+
+    
+    
     st.plotly_chart(fig)
+
+
+
+
+################## GRAPH 4  ####################
+
